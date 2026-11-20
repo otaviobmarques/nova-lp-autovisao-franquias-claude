@@ -5,16 +5,20 @@
    ========================================================================= */
 window.AV_CONFIG = {
   /* --- Rastreamento ------------------------------------------------------
-     IDs copiados do site atual (sejaumfranqueado.autovisao.com) em 20/11/2026.
-     ATENÇÃO: se algum container do GTM já dispara GA4, Google Ads ou o Pixel,
-     apague o ID correspondente aqui para não contar tudo em dobro. */
+     IDs da conta Auto Visão. Não misture com tags de outros clientes. */
   GTM_IDS: ['GTM-TS9TTZT4', 'GTM-P89JQ5JP'],
   GA4_ID: 'G-6YX7V9V32Q',
   GOOGLE_ADS_ID: 'AW-16735504209',
-  // Rótulo da conversão de lead no Google Ads (Ferramentas > Conversões).
-  // Formato: 'AbCdEfGhIjK'. Sem rótulo, a conversão do Ads não é enviada
-  // (o remarketing continua funcionando).
-  GOOGLE_ADS_LEAD_LABEL: '',
+  /* Conversão de lead (envio dos formulários). */
+  GOOGLE_ADS_LEAD_LABEL: 'TSX2CPHt3P8ZENGOjqw-',
+  /* Conversão '[Site] Botão wpp' — todo clique em WhatsApp.
+     O GTM-P89JQ5JP também dispara este rótulo em links com wa.me.
+     Com a flag abaixo ligada, o clique conta nos dois. Veja o README. */
+  GOOGLE_ADS_WHATSAPP_LABEL: 'nLbrCMG-wd4ZENGOjqw-',
+  /* true: envia as conversões do Ads pelo gtag (padrão).
+     false: não envia pelo gtag. Use só se o GTM for a única fonte.
+     Os eventos av_* continuam no dataLayer nos dois casos. */
+  SEND_ADS_CONVERSIONS_VIA_GTAG: true,
   META_PIXEL_ID: '916911729103377',
 
   /* --- Captcha (Cloudflare Turnstile, gratuito) --------------------------
@@ -23,8 +27,8 @@ window.AV_CONFIG = {
   TURNSTILE_SITE_KEY: '',
 
   /* --- Destino dos leads -------------------------------------------------
-     URL do Web App do Google Apps Script (veja integrations/google-apps-script.gs),
-     ou qualquer webhook que aceite POST com JSON (RD Station, Zapier, Make, n8n...). */
+     ÚNICO lugar da URL. Cole aqui o /exec do Apps Script (DEPLOY-APPS-SCRIPT.md).
+     Vazio = o formulário confirma na página e abre o WhatsApp, sem gravar o lead. */
   LEAD_ENDPOINT: '',
 
   /* --- Apresentação para download (Google Drive, "qualquer pessoa com o link") */

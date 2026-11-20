@@ -24,24 +24,28 @@ Tudo fica em **`assets/js/config.js`**:
 
 | Campo | Valor atual | O que é |
 |---|---|---|
-| `GTM_IDS` | `GTM-TS9TTZT4`, `GTM-P89JQ5JP` | Containers do Tag Manager (copiados do site atual) |
+| `GTM_IDS` | `GTM-TS9TTZT4`, `GTM-P89JQ5JP` | Containers do Tag Manager |
 | `GA4_ID` | `G-6YX7V9V32Q` | Google Analytics 4 |
-| `GOOGLE_ADS_ID` | `AW-16735504209` | Remarketing do Google Ads |
-| `GOOGLE_ADS_LEAD_LABEL` | *(vazio)* | Rótulo da conversão de lead no Ads |
+| `GOOGLE_ADS_ID` | `AW-16735504209` | Google Ads |
+| `GOOGLE_ADS_LEAD_LABEL` | `TSX2CPHt3P8ZENGOjqw-` | Conversão de lead (formulário enviado) |
+| `GOOGLE_ADS_WHATSAPP_LABEL` | `nLbrCMG-wd4ZENGOjqw-` | Conversão `[Site] Botão wpp` (todo clique de WhatsApp) |
+| `SEND_ADS_CONVERSIONS_VIA_GTAG` | `true` | `false` desliga o envio dessas conversões pelo gtag e deixa só o GTM |
 | `META_PIXEL_ID` | `916911729103377` | Pixel da Meta |
 | `TURNSTILE_SITE_KEY` | *(vazio)* | Captcha Cloudflare Turnstile. Vazio = desafio próprio (conta simples) |
-| `LEAD_ENDPOINT` | *(vazio)* | Para onde os leads vão (ver abaixo) |
+| `LEAD_ENDPOINT` | *(vazio — único lugar da URL)* | Web App `/exec` do Apps Script. Ver `DEPLOY-APPS-SCRIPT.md` |
 | `PRESENTATION_FILE_ID` | ID do PDF no Drive | O arquivo precisa estar como "qualquer pessoa com o link" |
 
 > As tags `<noscript>` do GTM e do Pixel no `index.html` repetem os IDs. Se trocar um ID, troque lá também.
 
 ### Leads: para onde vão
 
-Sem `LEAD_ENDPOINT`, o lead só vira evento (GTM/GA4/Pixel) e abre o WhatsApp. **Configure um destino antes de colocar no ar.**
+O endereço fica só em `LEAD_ENDPOINT`. Enquanto estiver vazio, o lead vira evento (GTM, GA4 e Pixel), a tela de sucesso aparece e o fluxo de WhatsApp continua igual. Nada é gravado na planilha.
 
-Opção pronta e gratuita: `integrations/google-apps-script.gs` grava cada lead numa Planilha Google, valida o Turnstile no servidor e manda e-mail para a expansão. As instruções estão no topo do arquivo. Também funciona com qualquer webhook que receba POST com JSON (RD Station, Zapier, Make, n8n).
+O POST sai em segundo plano (`fetch` com `keepalive` e `text/plain`, para não disparar preflight no Apps Script). Se a rede falhar, tenta `sendBeacon`. A confirmação na página não espera a resposta e não quebra se o endpoint estiver fora.
 
-Cada lead leva: nome, WhatsApp, e-mail, cidade, UF, prazo, temperatura (quente/morno/frio), UTMs de primeiro e último toque, gclid/fbclid, cookies `_fbp`/`_fbc`, client id do GA e `event_id` (para deduplicar com a API de Conversões da Meta).
+Para receber por e-mail, publique `integrations/google-apps-script.gs` como App da Web (acesso: qualquer pessoa). O passo a passo está em `DEPLOY-APPS-SCRIPT.md`. O aviso já vai para `otaviobmarques@gmail.com`, com o assunto `Novo lead Franquia Auto Visão - <nome>`, todos os campos do formulário, UTMs de primeiro e último toque, gclid/gbraid/wbraid/fbclid, página e data/hora em America/Sao_Paulo. Também funciona com qualquer webhook que receba POST com JSON.
+
+Cada lead leva: nome, WhatsApp, e-mail, cidade, UF, prazo, temperatura (quente/morno/frio), mensagem, UTMs, cookies `_fbp`/`_fbc`, client id do GA e `event_id` (para deduplicar com a API de Conversões da Meta).
 
 ## Rastreamento e remarketing
 
@@ -55,11 +59,11 @@ Todo evento sai por `AV.track()` em `assets/js/tracking.js` e vai ao mesmo tempo
 | `engaged_visitor` | `VisitanteEngajado` | 30 s, 60 s e 120 s com a aba ativa | 60 s+ sem lead |
 | `returning_visitor` | `VisitanteRecorrente` | 2ª visita em diante | Voltou e não converteu (alta intenção) |
 | `form_start` | `FormularioIniciado` | Clicou num campo | **Abandono de formulário** |
-| `form_error` | — | Tentou enviar com erro | Diagnóstico de UX |
+| `form_error` | `FormularioErro` | Tentou enviar com erro | Diagnóstico de UX |
 | `generate_lead` | `Lead` | Formulário enviado. Leva `value` pela temperatura | Excluir de campanhas de captação |
 | `file_download` | `DownloadApresentacao` | PDF liberado | Baixou e não chamou no WhatsApp |
 | `contact` | `Contact` | Clique em WhatsApp, telefone ou e-mail | Contatos |
-| `cta_click` | `CliqueCTA` | Qualquer botão com `data-track` | Análise de CTAs |
+| `cta_click` | `CliqueCTA` | Botões e CTAs, com `cta_text` (nome) e `section` | Análise de CTAs |
 | `faq_open` | `DuvidaAberta` | Abriu uma pergunta | Dúvidas mais comuns |
 | `service_tab` | `ServicosFiltro` | Filtrou serviços | Interesse em B2B |
 | `exit_intent` | `IntencaoSaida` | Mouse saindo da página (desktop) | — |
@@ -68,7 +72,21 @@ Todo evento sai por `AV.track()` em `assets/js/tracking.js` e vai ao mesmo tempo
 
 Também ativos: correspondência avançada do Pixel e conversões otimizadas do Google (dados com hash), Consent Mode v2 com banner LGPD, captura de UTM/gclid/fbclid. Para ver os eventos no console, abra a página com `?av_debug=1`.
 
-**Sobre o GTM atual:** os dois containers só têm tags de conversão do Google Ads (contas `AW-16735504209` e `AW-11341887504`), sem GA4 nem Pixel, então não há contagem em dobro. Os gatilhos dessas conversões foram feitos para o site antigo: aponte-os para o evento `av_generate_lead`.
+### Conversões do Google Ads
+
+| Ação | Rótulo | Quando dispara |
+|---|---|---|
+| Lead do formulário | `TSX2CPHt3P8ZENGOjqw-` | Envio bem-sucedido da apresentação e do contato |
+| `[Site] Botão wpp` | `nLbrCMG-wd4ZENGOjqw-` | Qualquer clique em link de WhatsApp |
+
+As duas saem pelo `gtag` com `SEND_ADS_CONVERSIONS_VIA_GTAG` em `true` (padrão). Os eventos `av_generate_lead` e `av_contact` continuam no dataLayer mesmo se a flag for `false`.
+
+**Contagem em dobro, conferida nos containers em 20/11/2026:**
+
+- `GTM-P89JQ5JP` já dispara a conversão de WhatsApp (`nLbrCMG-wd4ZENGOjqw-`, conta `AW-16735504209`) em todo clique cujo link contém `wa.me`. Com a flag ligada, esse clique entra de novo pelo gtag. É a conversão da campanha de Pesquisa: antes de otimizar o lance, pause essa tag no GTM **ou** mude a flag para `false`. Se desligar a flag, crie no GTM a conversão de lead no evento `av_generate_lead` com o rótulo `TSX2CPHt3P8ZENGOjqw-`, porque ela não existe nesses containers.
+- `GTM-TS9TTZT4` não tem GA4 nem Pixel. As conversões dele são de outra conta e disparam pelo texto dos botões do site antigo ("Seja um Franqueado", "TORNE-SE UM FRANQUEADO", "Chame no WhatsApp") e por uma imagem do Elementor. Nenhum botão desta página usa esse texto, então essas tags não disparam aqui. Não copie ID de outra conta para o `config.js`.
+
+Nenhum dos dois containers dispara o lead `TSX2CPHt3P8ZENGOjqw-`. Por isso o padrão é enviar pelo gtag.
 
 ## SEO e IAs
 
@@ -87,9 +105,23 @@ Também ativos: correspondência avançada do Pixel e conversões otimizadas do 
 - Símbolo isolado para outros usos: `assets/img/simbolo-autovisao.svg` e `simbolo-autovisao-branco.svg`
 - Banner de prévia (WhatsApp, LinkedIn, Facebook, X): `assets/img/og-preview.jpg`, 1200×630, 95 KB (o WhatsApp ignora imagens acima de ~300 KB)
 
-**Ao migrar para o domínio final**, troque `https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude` por `https://sejaumfranqueado.autovisao.com` nas tags `og:url`, `og:image`, `og:image:secure_url` e `twitter:image` do `index.html`. Depois, force a atualização da prévia no [Depurador de Compartilhamento da Meta](https://developers.facebook.com/tools/debug/) e no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/).
+Canonical, Open Graph (`og:url`, `og:image`, `og:image:secure_url`), Twitter (`twitter:url`, `twitter:image`), `sitemap.xml`, `robots.txt`, `llms.txt` e `llms-full.txt` já apontam para `https://sejaumfranqueado.autovisao.com/`. A política de privacidade está em `/privacidade.html`, linkada no rodapé, no aviso de cookies e nos formulários, e incluída no sitemap.
 
-Depois de publicar no domínio final: envie o sitemap no Google Search Console e no Bing Webmaster Tools (o Bing alimenta o ChatGPT e o Copilot).
+Depois que o domínio estiver respondendo por esta página, force a atualização da prévia no [Depurador de Compartilhamento da Meta](https://developers.facebook.com/tools/debug/) e no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/). Envie o sitemap no Google Search Console e no Bing Webmaster Tools (o Bing alimenta o ChatGPT e o Copilot).
+
+## Conferir o rastreamento
+
+Abra a página com `?av_debug=1`. O console mostra cada `[AV.track]` e cada `[AV.ads]` (`gtag` ou `gtag desligado`).
+
+- Rolagem: `scroll_depth` em 25, 50, 75 e 90.
+- Tempo com a aba visível: `engaged_visitor` aos 30 s, 60 s e 120 s.
+- Seções: `section_view` quando uma faixa da seção entra na tela, inclusive seções mais altas que o celular. Serviços, Estrutura, Apresentação e Como abrir também disparam `view_content`.
+- CTAs e botões: `cta_click` com `cta_text` e `section`.
+- WhatsApp, telefone e e-mail: `contact`. No WhatsApp, `[AV.ads]` com o rótulo `nLbrCMG-wd4ZENGOjqw-`.
+- Formulário: `form_start` ao focar, `form_error` se faltar campo, `generate_lead` no GA4 e Lead no Pixel no envio válido, mais `[AV.ads]` com `TSX2CPHt3P8ZENGOjqw-`. No download, `file_download` em seguida.
+- Filtro de serviços: `service_tab`. Pergunta do FAQ: `faq_open`.
+
+O envio do formulário pede cerca de 2,5 s depois do primeiro clique no campo. Antes disso, a página pede para enviar de novo e não conta lead.
 
 ## Rodar localmente
 
