@@ -19,3 +19,14 @@ com link público (a Meta e o Google exigem uma URL para importar a mídia). **N
 | `google-*` | Google Ads: imagens sem texto sobreposto (1,91:1 e 1:1) |
 
 Formatos: `-1x1` = 1080×1080 (feed), `-9x16` = 1080×1920 (Stories/Reels, com zona segura).
+
+## v2 (`v2/`): um "DNA" do Design System por peça
+
+| Arquivo | Linguagem (DS p.3 e p.23) | Mensagem |
+|---|---|---|
+| `v2-abertura-*` | Abertura: foto ampla + faixa vermelha | Seu próximo negócio pode ser Auto Visão |
+| `v2-institucional-*` | Institucional: fundo branco, título em duas cores | +240 lojas. A próxima pode ser a sua |
+| `v2-tecnologia-*` | Tecnologia: fundo escuro, carro em destaque | Vistoria 360° · 11 serviços |
+| `v2-comparativo-*` | Comparativo dividido | Abrir sozinho × abrir Auto Visão |
+| `v2-laudo-*` | Prova: o laudo como produto | +80 mil laudos por mês, mesmo padrão |
+| `v2-depoimento-*` | Prova social em vermelho | "Uma das melhores decisões que já tomei" |
