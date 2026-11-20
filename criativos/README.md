@@ -11,6 +11,10 @@ com link público (a Meta e o Google exigem uma URL para importar a mídia). **N
 | `mercado-*` | Prospecção: 15,8 mi de usados negociados em 2024 (Fenabrave) |
 | `servicos-*` | Prospecção: 11 serviços |
 | `video-numeros-*` | Prospecção: vídeo de 12 s com os números da rede |
+| `rgrand-*` | Remarketing de venda: grandeza da rede (+240 lojas) |
+| `rknow-*` | Remarketing de venda: know-how (+15 anos, +80 mil laudos/mês) |
+| `restr-*` | Remarketing de venda: estrutura (12 áreas da matriz) |
+| `rdec-*` | Remarketing de venda: decisão (consultar a cidade) |
 | `dep1-*`, `dep2-*` | Remarketing: depoimentos de franqueados + números |
 | `google-*` | Google Ads: imagens sem texto sobreposto (1,91:1 e 1:1) |
 
