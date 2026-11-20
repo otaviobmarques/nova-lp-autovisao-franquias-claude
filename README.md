@@ -24,7 +24,7 @@ Tudo fica em **`assets/js/config.js`**:
 
 | Campo | Valor atual | O que é |
 |---|---|---|
-| `GTM_IDS` | `GTM-TS9TTZT4`, `GTM-P89JQ5JP` | Containers do Tag Manager |
+| `GTM_IDS` | `GTM-M7TGT3T` | Container do Otávio. Está vazio. O script entra pelo `tracking.js`, no head |
 | `GA4_ID` | `G-6YX7V9V32Q` | Google Analytics 4 |
 | `GOOGLE_ADS_ID` | `AW-16735504209` | Google Ads |
 | `GOOGLE_ADS_LEAD_LABEL` | `TSX2CPHt3P8ZENGOjqw-` | Conversão de lead (formulário enviado) |
@@ -32,14 +32,14 @@ Tudo fica em **`assets/js/config.js`**:
 | `SEND_ADS_CONVERSIONS_VIA_GTAG` | `true` | `false` desliga o envio dessas conversões pelo gtag e deixa só o GTM |
 | `META_PIXEL_ID` | `916911729103377` | Pixel da Meta |
 | `TURNSTILE_SITE_KEY` | *(vazio)* | Captcha Cloudflare Turnstile. Vazio = desafio próprio (conta simples) |
-| `LEAD_ENDPOINT` | *(vazio — único lugar da URL)* | Web App `/exec` do Apps Script. Ver `DEPLOY-APPS-SCRIPT.md` |
+| `LEAD_ENDPOINT` | URL `/exec` publicada | Único lugar do Web App. Ver `DEPLOY-APPS-SCRIPT.md` |
 | `PRESENTATION_FILE_ID` | ID do PDF no Drive | O arquivo precisa estar como "qualquer pessoa com o link" |
 
 > As tags `<noscript>` do GTM e do Pixel no `index.html` repetem os IDs. Se trocar um ID, troque lá também.
 
 ### Leads: para onde vão
 
-O endereço fica só em `LEAD_ENDPOINT`. Enquanto estiver vazio, o lead vira evento (GTM, GA4 e Pixel), a tela de sucesso aparece e o fluxo de WhatsApp continua igual. Nada é gravado na planilha.
+O endereço fica só em `LEAD_ENDPOINT` e já aponta para o App da Web publicado. A tela de sucesso e o fluxo de WhatsApp não esperam a resposta. Se o campo for esvaziado, o lead continua só como evento (GTM, GA4 e Pixel).
 
 O POST sai em segundo plano (`fetch` com `keepalive` e `text/plain`, para não disparar preflight no Apps Script). Se a rede falhar, tenta `sendBeacon`. A confirmação na página não espera a resposta e não quebra se o endpoint estiver fora.
 
@@ -79,14 +79,9 @@ Também ativos: correspondência avançada do Pixel e conversões otimizadas do 
 | Lead do formulário | `TSX2CPHt3P8ZENGOjqw-` | Envio bem-sucedido da apresentação e do contato |
 | `[Site] Botão wpp` | `nLbrCMG-wd4ZENGOjqw-` | Qualquer clique em link de WhatsApp |
 
-As duas saem pelo `gtag` com `SEND_ADS_CONVERSIONS_VIA_GTAG` em `true` (padrão). Os eventos `av_generate_lead` e `av_contact` continuam no dataLayer mesmo se a flag for `false`.
+As duas saem pelo `gtag` com `SEND_ADS_CONVERSIONS_VIA_GTAG` em `true`. Pixel, GA4 e essas conversões saem direto pelo código. Os eventos `av_*` continuam no dataLayer.
 
-**Contagem em dobro, conferida nos containers em 20/11/2026:**
-
-- `GTM-P89JQ5JP` já dispara a conversão de WhatsApp (`nLbrCMG-wd4ZENGOjqw-`, conta `AW-16735504209`) em todo clique cujo link contém `wa.me`. Com a flag ligada, esse clique entra de novo pelo gtag. É a conversão da campanha de Pesquisa: antes de otimizar o lance, pause essa tag no GTM **ou** mude a flag para `false`. Se desligar a flag, crie no GTM a conversão de lead no evento `av_generate_lead` com o rótulo `TSX2CPHt3P8ZENGOjqw-`, porque ela não existe nesses containers.
-- `GTM-TS9TTZT4` não tem GA4 nem Pixel. As conversões dele são de outra conta e disparam pelo texto dos botões do site antigo ("Seja um Franqueado", "TORNE-SE UM FRANQUEADO", "Chame no WhatsApp") e por uma imagem do Elementor. Nenhum botão desta página usa esse texto, então essas tags não disparam aqui. Não copie ID de outra conta para o `config.js`.
-
-Nenhum dos dois containers dispara o lead `TSX2CPHt3P8ZENGOjqw-`. Por isso o padrão é enviar pelo gtag.
+O `GTM-M7TGT3T` está vazio. Não crie nele tag de conversão de lead nem de WhatsApp sem antes mudar `SEND_ADS_CONVERSIONS_VIA_GTAG` para `false`. Com a flag ligada, a mesma conversão no GTM conta duas vezes.
 
 ## SEO e IAs
 

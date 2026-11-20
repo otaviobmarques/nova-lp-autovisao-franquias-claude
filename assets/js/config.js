@@ -6,14 +6,15 @@
 window.AV_CONFIG = {
   /* --- Rastreamento ------------------------------------------------------
      IDs da conta Auto Visão. Não misture com tags de outros clientes. */
-  GTM_IDS: ['GTM-TS9TTZT4', 'GTM-P89JQ5JP'],
+  /* Container vazio, na conta do Otávio. Os eventos av_* seguem no dataLayer.
+     Não crie tag de conversão nele sem desligar SEND_ADS_CONVERSIONS_VIA_GTAG. */
+  GTM_IDS: ['GTM-M7TGT3T'],
   GA4_ID: 'G-6YX7V9V32Q',
   GOOGLE_ADS_ID: 'AW-16735504209',
   /* Conversão de lead (envio dos formulários). */
   GOOGLE_ADS_LEAD_LABEL: 'TSX2CPHt3P8ZENGOjqw-',
   /* Conversão '[Site] Botão wpp' — todo clique em WhatsApp.
-     O GTM-P89JQ5JP também dispara este rótulo em links com wa.me.
-     Com a flag abaixo ligada, o clique conta nos dois. Veja o README. */
+     Sai pelo gtag. O GTM está vazio de propósito. */
   GOOGLE_ADS_WHATSAPP_LABEL: 'nLbrCMG-wd4ZENGOjqw-',
   /* true: envia as conversões do Ads pelo gtag (padrão).
      false: não envia pelo gtag. Use só se o GTM for a única fonte.
@@ -29,7 +30,7 @@ window.AV_CONFIG = {
   /* --- Destino dos leads -------------------------------------------------
      ÚNICO lugar da URL. Cole aqui o /exec do Apps Script (DEPLOY-APPS-SCRIPT.md).
      Vazio = o formulário confirma na página e abre o WhatsApp, sem gravar o lead. */
-  LEAD_ENDPOINT: '',
+  LEAD_ENDPOINT: 'https://script.google.com/macros/s/AKfycbwKBv170Jt_vBEp0ZZzUjOvBztvG-b3ND2ITy6qBcwdH6SwtrxfmRnLrCu49lLGEWBs/exec',
 
   /* --- Apresentação para download (Google Drive, "qualquer pessoa com o link") */
   PRESENTATION_FILE_ID: '1D0wnsYKTpuYCD928u2J6OrE54C9iRuDi',
