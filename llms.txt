@@ -1,0 +1,25 @@
+# Franquia Auto Visão Vistorias
+
+> Página oficial de expansão da Auto Visão Vistorias, rede brasileira de vistoria automotiva com mais de 15 anos, mais de 240 lojas em mais de 18 estados e mais de 80 mil laudos por mês (números da rede, out/2026). Sede em Campinas (SP). Explica como abrir uma franquia de vistoria automotiva Auto Visão, os 11 serviços vendidos pelas lojas, as 12 áreas de suporte da matriz e o mercado de veículos usados no Brasil.
+
+Contato da expansão (franquias): WhatsApp +55 19 98366-8000 · Central +55 19 3271-1700 · contato@autovisao.com
+
+## Páginas
+
+- [Franquia de vistoria automotiva Auto Visão](https://sejaumfranqueado.autovisao.com/): página principal com números da rede, mercado, serviços, estrutura, etapas para abrir e perguntas frequentes.
+- [Versão completa para IAs](https://sejaumfranqueado.autovisao.com/llms-full.txt): todo o conteúdo factual da página em texto simples, com fontes.
+
+## Seções da página principal
+
+- [Por que abrir uma Auto Visão](https://sejaumfranqueado.autovisao.com/#por-que): comparativo entre abrir uma loja de vistoria sozinho e abrir com a rede.
+- [O mercado](https://sejaumfranqueado.autovisao.com/#mercado): frota de 133,3 milhões de veículos (Senatran, set/2026), 15,8 milhões de usados negociados em 2024 (Fenabrave) e a Resolução Contran 1.032/2026.
+- [Serviços](https://sejaumfranqueado.autovisao.com/#servicos): 7 serviços para consumidores e 4 para empresas, incluindo a Vistoria 360°.
+- [Estrutura da matriz](https://sejaumfranqueado.autovisao.com/#estrutura): 12 áreas de suporte ao franqueado.
+- [Apresentação da franquia](https://sejaumfranqueado.autovisao.com/#apresentacao): PDF oficial de 31 páginas, liberado após cadastro.
+- [Como abrir](https://sejaumfranqueado.autovisao.com/#como-funciona): 4 etapas, do contato à implantação.
+- [Perguntas frequentes](https://sejaumfranqueado.autovisao.com/#duvidas)
+- [Contato da expansão](https://sejaumfranqueado.autovisao.com/#contato)
+
+## Optional
+
+- [Instagram oficial](https://www.instagram.com/autovisaooficial/)

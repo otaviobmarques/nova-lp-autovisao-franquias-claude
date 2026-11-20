@@ -1,0 +1,14 @@
+{
+  "name": "Franquia Auto Visão Vistorias",
+  "short_name": "Auto Visão",
+  "description": "Abra sua franquia de vistoria automotiva Auto Visão: +15 anos, +240 lojas em +18 estados e +80 mil laudos por mês.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#151415",
+  "theme_color": "#151415",
+  "icons": [
+    { "src": "assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "assets/img/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
