@@ -100,7 +100,9 @@ O `GTM-M7TGT3T` está vazio. Não crie nele tag de conversão de lead nem de Wha
 - Símbolo isolado para outros usos: `assets/img/simbolo-autovisao.svg` e `simbolo-autovisao-branco.svg`
 - Banner de prévia (WhatsApp, LinkedIn, Facebook, X): `assets/img/og-preview.jpg`, 1200×630, 95 KB (o WhatsApp ignora imagens acima de ~300 KB)
 
-Canonical, Open Graph (`og:url`, `og:image`, `og:image:secure_url`), Twitter (`twitter:url`, `twitter:image`), `sitemap.xml`, `robots.txt`, `llms.txt` e `llms-full.txt` já apontam para `https://sejaumfranqueado.autovisao.com/`. A política de privacidade está em `/privacidade.html`, linkada no rodapé, no aviso de cookies e nos formulários, e incluída no sitemap.
+Canonical, Open Graph (`og:url`, `og:image`, `og:image:secure_url`), Twitter (`twitter:url`, `twitter:image`), `sitemap.xml`, `robots.txt`, `llms.txt` e `llms-full.txt` já apontam para `https://sejaumfranqueado.autovisao.com/`. A política de privacidade está em `/privacidade`.
+
+Páginas internas para sitelink, com URL limpa (`vercel.json` com `cleanUrls`): `/mercado`, `/servicos`, `/estrutura-e-suporte`, `/como-funciona`, `/depoimentos`, `/duvidas` e `/fale-conosco`. O menu da home continua em âncoras. Essas páginas usam o mesmo `config.js` e `tracking.js` da home.
 
 Depois que o domínio estiver respondendo por esta página, force a atualização da prévia no [Depurador de Compartilhamento da Meta](https://developers.facebook.com/tools/debug/) e no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/). Envie o sitemap no Google Search Console e no Bing Webmaster Tools (o Bing alimenta o ChatGPT e o Copilot).
 

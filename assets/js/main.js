@@ -48,7 +48,9 @@
     var navIO = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (e.isIntersecting) navLinks.forEach(function (a) {
-          var on = a.getAttribute('href') === '#' + e.target.id;
+          var href = a.getAttribute('href') || '';
+          if (href.charAt(0) !== '#') return;
+          var on = href === '#' + e.target.id;
           a.classList.toggle('is-active', on);
           if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
         });
