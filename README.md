@@ -83,6 +83,7 @@ Também ativos: correspondência avançada do Pixel e conversões otimizadas do 
 ## Ícones e prévia de link
 
 - Favicon gerado do **vetor oficial do símbolo** (DS p.31), sem redesenho: `favicon.ico` (16/32/48), `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` (180), `icon-192/512.png` e `icon-maskable-512.png` (Android, versão branca sobre vermelho)
+- **Logotipo em vetor**, extraído do Design System (p.31), com fundo transparente: `logo-autovisao.svg` (colorido, para fundo claro) e `logo-autovisao-branco.svg` (todo branco, para fundo escuro ou vermelho). Versões PNG transparentes de 1200 px com os mesmos nomes, para usos que não aceitam SVG
 - Símbolo isolado para outros usos: `assets/img/simbolo-autovisao.svg` e `simbolo-autovisao-branco.svg`
 - Banner de prévia (WhatsApp, LinkedIn, Facebook, X): `assets/img/og-preview.jpg`, 1200×630, 95 KB (o WhatsApp ignora imagens acima de ~300 KB)
 

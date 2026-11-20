@@ -110,7 +110,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .header__inner { height: 100%; display: flex; align-items: center; gap: 24px; }
 .header__logo { flex: none; }
 .header__logo img { height: 40px; width: auto; }
-.logo-light { display: none !important; }
 .nav { display: none; gap: 4px; margin: 0 auto; }
 .nav a { color: rgba(255, 255, 255, .85); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 10px; border-radius: 6px; position: relative; transition: color var(--t2); }
 .nav a:hover, .nav a.is-active { color: #fff; }
