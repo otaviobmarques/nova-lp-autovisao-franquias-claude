@@ -84,6 +84,7 @@
     scroll_depth: 'ProfundidadeScroll',
     engaged_visitor: 'VisitanteEngajado',
     form_start: 'FormularioIniciado',
+    form_error: 'FormularioErro',
     cta_click: 'CliqueCTA',
     faq_open: 'DuvidaAberta',
     service_tab: 'ServicosFiltro',
@@ -112,7 +113,7 @@
       if (std) w.fbq('track', std, metaParams, { eventID: eventId });
       if (META_CUSTOM[name]) w.fbq('trackCustom', META_CUSTOM[name], Object.assign(metaParams, params), { eventID: eventId + '.c' });
     }
-    if (opts.debug || /[?&]av_debug=1/.test(location.search)) console.info('[AV.track]', name, payload);
+    if (opts.debug || /[?&]av_debug=1/.test(location.search)) console.info('[AV.track]', name, JSON.stringify(payload));
     return eventId;
   };
 
@@ -137,11 +138,17 @@
     }
   };
 
-  /* Conversão de lead no Google Ads (só com rótulo configurado). */
-  AV.adsConversion = function (value, eventId) {
-    if (C.GOOGLE_ADS_ID && C.GOOGLE_ADS_LEAD_LABEL) {
-      w.gtag('event', 'conversion', { send_to: C.GOOGLE_ADS_ID + '/' + C.GOOGLE_ADS_LEAD_LABEL, value: value || 1, currency: 'BRL', transaction_id: eventId });
-    }
+  /* Conversão do Google Ads. Sem rótulo, não envia.
+     SEND_ADS_CONVERSIONS_VIA_GTAG = false deixa o envio só para o GTM. */
+  AV.adsConversion = function (opts, maybeEventId) {
+    var o = (opts && typeof opts === 'object') ? opts : { value: opts, eventId: maybeEventId };
+    var label = o.label || C.GOOGLE_ADS_LEAD_LABEL || '';
+    var viaGtag = C.SEND_ADS_CONVERSIONS_VIA_GTAG !== false;
+    var payload = { send_to: (C.GOOGLE_ADS_ID || '') + '/' + label, value: o.value == null ? 1 : o.value, currency: 'BRL' };
+    if (o.eventId) payload.transaction_id = o.eventId;
+    if (/[?&]av_debug=1/.test(location.search)) console.info('[AV.ads]', viaGtag ? 'gtag' : 'gtag desligado', JSON.stringify(payload));
+    if (!viaGtag || !C.GOOGLE_ADS_ID || !label) return;
+    w.gtag('event', 'conversion', payload);
   };
 
   /* Contexto de atribuição enviado junto com cada lead. */
@@ -173,13 +180,16 @@
 
     // Profundidade de rolagem: 25/50/75/90%
     var marks = [25, 50, 75, 90], hit = {};
-    function onScroll() {
-      var h = d.documentElement, max = h.scrollHeight - h.clientHeight;
+    function onScrollDepth() {
+      var h = d.documentElement;
+      var scrolled = w.scrollY || h.scrollTop || d.body.scrollTop || 0;
+      var max = (h.scrollHeight || d.body.scrollHeight) - (h.clientHeight || w.innerHeight);
       if (max <= 0) return;
-      var pct = Math.round((h.scrollTop || d.body.scrollTop) / max * 100);
+      var pct = Math.round(scrolled / max * 100);
       marks.forEach(function (m) { if (pct >= m && !hit[m]) { hit[m] = 1; AV.track('scroll_depth', { percent: m }); } });
     }
-    w.addEventListener('scroll', onScroll, { passive: true });
+    w.addEventListener('scroll', onScrollDepth, { passive: true });
+    onScrollDepth();
 
     // Tempo de engajamento ativo (aba visível): 30s, 60s, 120s
     var active = 0, sent = {};
@@ -189,34 +199,74 @@
       [30, 60, 120].forEach(function (s) { if (active >= s && !sent[s]) { sent[s] = 1; AV.track('engaged_visitor', { seconds: s }); } });
     }, 5000);
 
-    // Seções vistas (audiências por interesse). Serviços/Estrutura/Apresentação viram ViewContent.
+    // Seções vistas (audiências por interesse). Serviços/Estrutura/Apresentação/Como abrir viram ViewContent.
+    // A medição usa a área visível, então seções mais altas que a tela também disparam no celular.
     var CONTENT = { servicos: 1, estrutura: 1, apresentacao: 1, 'como-funciona': 1 };
-    if ('IntersectionObserver' in w) {
-      var seen = {};
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          var id = e.target.id;
-          if (e.isIntersecting && !seen[id]) {
-            seen[id] = 1;
-            AV.track('section_view', { section: id });
-            if (CONTENT[id]) AV.track('view_content', { content_name: id });
-          }
-        });
-      }, { threshold: 0.35 });
-      d.querySelectorAll('main section[id]').forEach(function (s) { io.observe(s); });
+    var seen = {}, scanQueued = false;
+    function scanSections() {
+      scanQueued = false;
+      var viewport = w.innerHeight || 1;
+      var minPx = Math.min(240, viewport * 0.3);
+      var pending = 0;
+      d.querySelectorAll('main section[id]').forEach(function (el) {
+        var id = el.id;
+        if (seen[id]) return;
+        pending++;
+        var r = el.getBoundingClientRect();
+        var visible = Math.min(r.bottom, viewport) - Math.max(r.top, 0);
+        var ratio = r.height > 0 ? visible / r.height : 0;
+        if (visible >= minPx || ratio >= 0.35) {
+          seen[id] = 1;
+          pending--;
+          AV.track('section_view', { section: id });
+          if (CONTENT[id]) AV.track('view_content', { content_name: id, section: id });
+        }
+      });
+      if (!pending) {
+        w.removeEventListener('scroll', requestScan);
+        w.removeEventListener('resize', requestScan);
+      }
+    }
+    function requestScan() {
+      if (scanQueued) return;
+      scanQueued = true;
+      if (w.requestAnimationFrame) w.requestAnimationFrame(scanSections);
+      else scanSections();
+    }
+    w.addEventListener('scroll', requestScan, { passive: true });
+    w.addEventListener('resize', requestScan);
+    requestScan();
+
+    function sectionOf(el) {
+      var loc = el.getAttribute('data-loc');
+      if (loc) return loc;
+      var sec = el.closest('section[id]');
+      if (sec) return sec.id;
+      if (el.closest('header')) return 'header';
+      if (el.closest('footer')) return 'footer';
+      var box = el.closest('[id]');
+      return box ? box.id : '';
     }
 
-    // Cliques: WhatsApp, telefone, e-mail e qualquer elemento com data-track
+    // Cliques: WhatsApp (com conversão do Ads), telefone, e-mail, CTAs e botões
     d.addEventListener('click', function (ev) {
       var a = ev.target.closest('a, button');
       if (!a) return;
       var href = a.getAttribute('href') || '';
-      var loc = a.getAttribute('data-loc') || (a.closest('[id]') || {}).id || '';
-      if (/wa\.me|whatsapp/.test(href)) AV.track('contact', { method: 'whatsapp', location: loc, content_name: 'whatsapp' });
-      else if (href.indexOf('tel:') === 0) AV.track('contact', { method: 'phone', location: loc, content_name: 'telefone' });
-      else if (href.indexOf('mailto:') === 0) AV.track('contact', { method: 'email', location: loc, content_name: 'email' });
+      var section = sectionOf(a);
+      var text = (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+      if (/wa\.me|whatsapp/i.test(href)) {
+        var eventId = AV.track('contact', { method: 'whatsapp', location: section, section: section, cta_text: text, content_name: text || 'WhatsApp' });
+        AV.adsConversion({ label: C.GOOGLE_ADS_WHATSAPP_LABEL, value: 1, eventId: eventId });
+      } else if (href.indexOf('tel:') === 0) {
+        AV.track('contact', { method: 'phone', location: section, section: section, cta_text: text, content_name: 'telefone' });
+      } else if (href.indexOf('mailto:') === 0) {
+        AV.track('contact', { method: 'email', location: section, section: section, cta_text: text, content_name: 'email' });
+      }
       var t = a.getAttribute('data-track');
-      if (t) AV.track('cta_click', { cta_id: t, location: loc, cta_text: (a.textContent || '').trim().slice(0, 60) });
+      if (t || a.classList.contains('btn')) {
+        AV.track('cta_click', { cta_id: t || 'botao', location: section, section: section, cta_text: text });
+      }
     });
   });
 })();

@@ -17,16 +17,15 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
 
-  <!-- Open Graph / WhatsApp / LinkedIn -->
+  <!-- Open Graph / WhatsApp / LinkedIn / X -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Auto Visão Vistorias">
   <meta property="og:title" content="Seu próximo negócio pode ser Auto Visão | Franquia de Vistoria Automotiva">
   <meta property="og:description" content="+240 lojas, +18 estados, +80 mil laudos por mês e uma matriz com 12 áreas trabalhando pela sua loja. Baixe a apresentação da franquia.">
-  <!-- Ao migrar para o domínio final, troque o endereço abaixo em og:url, og:image e twitter:image -->
-  <meta property="og:url" content="https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude/">
-  <meta property="og:image" content="https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude/assets/img/og-preview.jpg">
-  <meta property="og:image:secure_url" content="https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude/assets/img/og-preview.jpg">
+  <meta property="og:url" content="https://sejaumfranqueado.autovisao.com/">
+  <meta property="og:image" content="https://sejaumfranqueado.autovisao.com/assets/img/og-preview.jpg">
+  <meta property="og:image:secure_url" content="https://sejaumfranqueado.autovisao.com/assets/img/og-preview.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -34,7 +33,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Seu próximo negócio pode ser Auto Visão">
   <meta name="twitter:description" content="Franquia de vistoria automotiva com +240 lojas e suporte de 12 áreas da matriz.">
-  <meta name="twitter:image" content="https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude/assets/img/og-preview.jpg">
+  <meta name="twitter:url" content="https://sejaumfranqueado.autovisao.com/">
+  <meta name="twitter:image" content="https://sejaumfranqueado.autovisao.com/assets/img/og-preview.jpg">
   <meta name="twitter:image:alt" content="Franquia Auto Visão: +240 lojas, +18 estados, +80 mil laudos por mês">
 
   <!-- Performance -->
@@ -212,7 +212,7 @@
       <a href="#duvidas">Dúvidas</a>
     </nav>
     <a class="btn btn--primary btn--block" href="#contato" data-track="drawer_quero" data-loc="drawer">Quero ser franqueado</a>
-    <a class="btn btn--wpp btn--block" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20saber%20como%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-loc="drawer">
+    <a class="btn btn--wpp btn--block" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20saber%20como%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-track="drawer_whatsapp" data-loc="drawer">
       <svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Falar no WhatsApp
     </a>
   </div>
@@ -235,7 +235,7 @@
             <a class="btn btn--primary btn--lg" href="#apresentacao" data-track="hero_apresentacao" data-loc="hero">
               <svg class="ico" aria-hidden="true"><use href="#i-down"/></svg> Baixar a apresentação grátis
             </a>
-            <a class="btn btn--ghost-light btn--lg" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Vi%20o%20site%20e%20quero%20abrir%20uma%20Auto%20Vis%C3%A3o%20na%20minha%20cidade." target="_blank" rel="noopener" data-loc="hero">
+            <a class="btn btn--ghost-light btn--lg" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Vi%20o%20site%20e%20quero%20abrir%20uma%20Auto%20Vis%C3%A3o%20na%20minha%20cidade." target="_blank" rel="noopener" data-track="hero_whatsapp" data-loc="hero">
               <svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Consultar minha cidade
             </a>
           </div>
@@ -588,10 +588,10 @@
               <span>Autorizo a Auto Visão a entrar em contato sobre a franquia, conforme a LGPD.</span>
             </label>
             <p class="field__msg field__msg--consent"></p>
-            <button class="btn btn--primary btn--block btn--lg" type="submit" data-label="Baixar apresentação">
+            <button class="btn btn--primary btn--block btn--lg" type="submit" data-track="download_enviar" data-loc="apresentacao" data-label="Baixar apresentação">
               <svg class="ico" aria-hidden="true"><use href="#i-down"/></svg> <span>Baixar apresentação</span>
             </button>
-            <p class="form-note"><svg class="ico ico--sm" aria-hidden="true"><use href="#i-lock"/></svg> Seus dados ficam com a Auto Visão. Nada de spam.</p>
+            <p class="form-note"><svg class="ico ico--sm" aria-hidden="true"><use href="#i-lock"/></svg> Seus dados ficam com a Auto Visão. Nada de spam. <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a></p>
           </form>
 
           <div class="form-success" id="downloadSuccess" hidden tabindex="-1">
@@ -601,7 +601,7 @@
             <a class="btn btn--primary btn--block" id="downloadLink" href="#" target="_blank" rel="noopener" data-track="download_manual" data-loc="apresentacao"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg> Baixar apresentação (PDF)</a>
             <div class="form-success__next">
               <p><strong>Próximo passo:</strong> consulte agora a disponibilidade da sua cidade com a expansão.</p>
-              <a class="btn btn--wpp btn--block" id="successWpp" href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-loc="download-success"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Falar com a expansão</a>
+              <a class="btn btn--wpp btn--block" id="successWpp" href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-track="download_sucesso_whatsapp" data-loc="download-success"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Falar com a expansão</a>
             </div>
           </div>
         </div>
@@ -673,7 +673,7 @@
           <p class="eyebrow">Dúvidas frequentes</p>
           <h2 id="faq-title" class="h2">Perguntas que todo futuro <span class="hl">franqueado faz.</span></h2>
           <p class="lead">Não encontrou a sua? A equipe de expansão responde no WhatsApp.</p>
-          <a class="btn btn--wpp" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20a%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-loc="duvidas"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Perguntar no WhatsApp</a>
+          <a class="btn btn--wpp" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20a%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-track="faq_whatsapp" data-loc="duvidas"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Perguntar no WhatsApp</a>
         </header>
         <div class="faq">
           <details class="faq__item"><summary>Preciso entender de carros para ter uma franquia Auto Visão?<svg class="ico" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="faq__a"><p>Não. O franqueado cuida da gestão, da equipe e do relacionamento comercial. Os vistoriadores recebem treinamento e reciclagem da matriz, e a Mesa de Análise revisa os laudos.</p></div></details>
@@ -695,9 +695,9 @@
           <h2 id="contato-title" class="h2 h2--white">Consulte a disponibilidade da sua cidade.</h2>
           <p class="lead lead--white">Deixe seus dados e o time de expansão chama você no WhatsApp com as condições atuais para abrir a sua loja.</p>
           <ul class="contact__list">
-            <li><a href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg><span><small>WhatsApp da expansão</small>(19) 98366-8000</span></a></li>
-            <li><a href="tel:+551932711700" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span><small>Central de atendimento</small>(19) 3271-1700</span></a></li>
-            <li><a href="mailto:contato@autovisao.com" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><small>E-mail</small>contato@autovisao.com</span></a></li>
+            <li><a href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-track="contato_whatsapp" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg><span><small>WhatsApp da expansão</small>(19) 98366-8000</span></a></li>
+            <li><a href="tel:+551932711700" data-track="contato_telefone" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span><small>Central de atendimento</small>(19) 3271-1700</span></a></li>
+            <li><a href="mailto:contato@autovisao.com" data-track="contato_email" data-loc="contato"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span><small>E-mail</small>contato@autovisao.com</span></a></li>
           </ul>
           <p class="contact__hq"><svg class="ico ico--sm" aria-hidden="true"><use href="#i-pin"/></svg> Sede em Campinas (SP)</p>
         </div>
@@ -753,15 +753,16 @@
               <span>Autorizo a Auto Visão a entrar em contato sobre a franquia, conforme a LGPD.</span>
             </label>
             <p class="field__msg field__msg--consent"></p>
-            <button class="btn btn--primary btn--block btn--lg" type="submit" data-label="Quero receber as condições">
+            <button class="btn btn--primary btn--block btn--lg" type="submit" data-track="contato_enviar" data-loc="contato" data-label="Quero receber as condições">
               <span>Quero receber as condições</span> <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
             </button>
+            <p class="form-note"><svg class="ico ico--sm" aria-hidden="true"><use href="#i-lock"/></svg> Seus dados ficam com a Auto Visão. <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a></p>
           </form>
           <div class="form-success" id="contatoSuccess" hidden tabindex="-1">
             <span class="form-success__icon"><svg class="ico ico--lg" aria-hidden="true"><use href="#i-check"/></svg></span>
             <h3 class="h3">Solicitação recebida</h3>
             <p>A equipe de expansão vai chamar você no WhatsApp. Quer adiantar? Envie sua mensagem agora.</p>
-            <a class="btn btn--wpp btn--block" id="contatoWpp" href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-loc="contato-success"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Abrir conversa no WhatsApp</a>
+            <a class="btn btn--wpp btn--block" id="contatoWpp" href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-track="contato_sucesso_whatsapp" data-loc="contato-success"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> Abrir conversa no WhatsApp</a>
           </div>
         </div>
       </div>
@@ -793,22 +794,25 @@
       </nav>
       <div>
         <h2 class="footer__h">Expansão</h2>
-        <a href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-loc="footer">WhatsApp (19) 98366-8000</a>
-        <a href="tel:+551932711700" data-loc="footer">Central (19) 3271-1700</a>
-        <a href="mailto:contato@autovisao.com" data-loc="footer">contato@autovisao.com</a>
-        <a href="https://www.instagram.com/autovisaooficial/" target="_blank" rel="noopener">Instagram @autovisaooficial</a>
+        <a href="https://wa.me/5519983668000" target="_blank" rel="noopener" data-track="footer_whatsapp" data-loc="footer">WhatsApp (19) 98366-8000</a>
+        <a href="tel:+551932711700" data-track="footer_telefone" data-loc="footer">Central (19) 3271-1700</a>
+        <a href="mailto:contato@autovisao.com" data-track="footer_email" data-loc="footer">contato@autovisao.com</a>
+        <a href="https://www.instagram.com/autovisaooficial/" target="_blank" rel="noopener" data-track="footer_instagram" data-loc="footer">Instagram @autovisaooficial</a>
       </div>
     </div>
     <div class="container footer__bottom">
       <p>© 2026 Auto Visão Vistorias. Todos os direitos reservados.</p>
-      <button class="link-btn" type="button" id="openConsent">Preferências de privacidade</button>
+      <p class="footer__legal">
+        <a href="privacidade.html">Política de privacidade</a>
+        <button class="link-btn" type="button" id="openConsent" data-track="abrir_consentimento" data-loc="footer">Preferências de privacidade</button>
+      </p>
     </div>
   </footer>
 
   <!-- Barra fixa no celular -->
   <div class="mobile-bar" id="mobileBar">
     <a class="btn btn--secondary-dark" href="#apresentacao" data-track="mobilebar_apresentacao" data-loc="mobile-bar"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg> Apresentação</a>
-    <a class="btn btn--wpp" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-loc="mobile-bar"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> WhatsApp</a>
+    <a class="btn btn--wpp" href="https://wa.me/5519983668000?text=Ol%C3%A1!%20Quero%20abrir%20uma%20franquia%20Auto%20Vis%C3%A3o." target="_blank" rel="noopener" data-track="mobilebar_whatsapp" data-loc="mobile-bar"><svg class="ico" aria-hidden="true"><use href="#i-wpp"/></svg> WhatsApp</a>
   </div>
 
   <!-- Intenção de saída (desktop, 1x por sessão) -->
@@ -822,10 +826,10 @@
 
   <!-- Banner LGPD -->
   <div class="cookie" id="cookieBanner" hidden role="region" aria-label="Privacidade">
-    <p>Usamos cookies para medir o site e mostrar anúncios relevantes da franquia Auto Visão. Você pode recusar.</p>
+    <p>Usamos cookies para medir o site e mostrar anúncios relevantes da franquia Auto Visão. Você pode recusar. Saiba mais na <a href="privacidade.html">política de privacidade</a>.</p>
     <div class="cookie__actions">
-      <button class="btn btn--secondary btn--sm" type="button" data-consent="denied">Recusar</button>
-      <button class="btn btn--primary btn--sm" type="button" data-consent="granted">Aceitar</button>
+      <button class="btn btn--secondary btn--sm" type="button" data-consent="denied" data-track="consent_recusar" data-loc="consentimento">Recusar</button>
+      <button class="btn btn--primary btn--sm" type="button" data-consent="granted" data-track="consent_aceitar" data-loc="consentimento">Aceitar</button>
     </div>
   </div>
 

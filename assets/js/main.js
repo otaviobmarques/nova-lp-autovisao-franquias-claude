@@ -7,8 +7,8 @@
   var AV = window.AV || { track: function () { return ''; }, identify: function () {}, adsConversion: function () {}, attribution: function () { return {}; }, setConsent: function () {}, consentDecided: function () { return true; }, uid: function () { return String(Date.now()); } };
   var d = document, w = window;
   d.documentElement.classList.add('js');
-  function $(s, r) { return (r || d).querySelector(s); }
-  function $$(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
+  function $(s, r) { try { return (r || d).querySelector(s); } catch (e) { return null; } }
+  function $$(s, r) { try { return Array.prototype.slice.call((r || d).querySelectorAll(s)); } catch (e) { return []; } }
   var reduced = w.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- Header sólido + barra mobile ---------- */
@@ -54,7 +54,12 @@
         });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    navLinks.forEach(function (a) { var s = $(a.getAttribute('href')); if (s) navIO.observe(s); });
+    navLinks.forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      if (href.charAt(0) !== '#') return;
+      var s = $(href);
+      if (s) navIO.observe(s);
+    });
     ['#inicio', '#numeros', '#apresentacao', '#depoimentos', '#contato'].forEach(function (id) { var s = $(id); if (s) navIO.observe(s); });
   }
 
@@ -95,7 +100,7 @@
         c.classList.toggle('is-showing', false);
         if (!hide && !reduced) { void c.offsetWidth; c.style.animationDelay = (i % 6) * 40 + 'ms'; c.classList.toggle('is-showing', true); }
       });
-      AV.track('service_tab', { tab: f });
+      AV.track('service_tab', { tab: f, section: 'servicos', content_name: f });
     });
   });
 
@@ -104,7 +109,9 @@
     it.addEventListener('toggle', function () {
       if (!it.open) return;
       $$('.faq__item').forEach(function (o) { if (o !== it) o.open = false; });
-      AV.track('faq_open', { question: $('summary', it).textContent.trim().slice(0, 90) });
+      var summary = $('summary', it);
+      var question = ((summary && summary.textContent) || '').replace(/\s+/g, ' ').trim().slice(0, 90);
+      AV.track('faq_open', { question: question, section: 'duvidas', content_name: question });
     });
   });
 
@@ -184,13 +191,18 @@
   /* ---------- Envio do lead ---------- */
   function driveUrl() { return 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(C.PRESENTATION_FILE_ID); }
   function wppUrl(text) { return 'https://wa.me/' + C.WHATSAPP + '?text=' + encodeURIComponent(text); }
+  function formSection(kind) { return kind === 'download' ? 'apresentacao' : 'contato'; }
+  /* O endpoint não pode segurar nem cancelar a confirmação na página. */
   function sendLead(data) {
-    if (!C.LEAD_ENDPOINT) return Promise.resolve();
+    if (!C.LEAD_ENDPOINT) return;
     var body = JSON.stringify(data);
-    // text/plain evita preflight CORS (compatível com Google Apps Script)
-    return fetch(C.LEAD_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body, keepalive: true }).catch(function () {
-      try { navigator.sendBeacon(C.LEAD_ENDPOINT, body); } catch (e) {}
-    });
+    var beacon = function () {
+      try { navigator.sendBeacon(C.LEAD_ENDPOINT, new Blob([body], { type: 'text/plain;charset=utf-8' })); } catch (e) {}
+    };
+    try {
+      // text/plain evita preflight CORS (compatível com Google Apps Script)
+      fetch(C.LEAD_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body, keepalive: true }).catch(beacon);
+    } catch (e) { beacon(); }
   }
   function startDownload() {
     // iframe oculto: o Drive responde com "attachment" e o navegador baixa sem abrir aba
@@ -206,7 +218,7 @@
 
     form.addEventListener('focusin', function () {
       if (started) return; started = true; t0 = Date.now();
-      AV.track('form_start', { form: kind });
+      AV.track('form_start', { form: kind, section: formSection(kind) });
     });
     fields.forEach(function (el) {
       el.addEventListener('blur', function () { if (el.value || el.type === 'checkbox') setError(el, check(el)); });
@@ -226,13 +238,19 @@
         var al = d.createElement('p'); al.className = 'form-alert'; al.setAttribute('role', 'alert'); al.textContent = MSG.captcha;
         capBox.after(al);
       }
-      if (firstBad) { firstBad.focus({ preventScroll: false }); AV.track('form_error', { form: kind, field: firstBad.name || 'captcha' }); return; }
-      // Anti-spam silencioso: honeypot preenchido ou envio rápido demais
+      if (firstBad) { firstBad.focus({ preventScroll: false }); AV.track('form_error', { form: kind, field: firstBad.name || 'captcha', section: formSection(kind) }); return; }
+      // Honeypot: robô, sem mensagem. Envio rápido demais: pede para tentar de novo, sem perder o formulário.
       var hp = form.elements.website && form.elements.website.value;
-      if (hp || Date.now() - t0 < 2500) { return; }
-
+      if (hp) return;
       var btn = $('button[type="submit"]', form), label = $('span', btn);
-      btn.disabled = true; btn.setAttribute('aria-busy', 'true'); label.textContent = 'Enviando...';
+      if (Date.now() - t0 < 2500) {
+        var wait = d.createElement('p'); wait.className = 'form-alert'; wait.setAttribute('role', 'alert');
+        wait.textContent = 'Confira os dados e toque em enviar de novo.';
+        btn.before(wait);
+        return;
+      }
+
+      btn.disabled = true; btn.setAttribute('aria-busy', 'true'); if (label) label.textContent = 'Enviando...';
 
       var v = function (n) { return (form.elements[n] && form.elements[n].value || '').trim(); };
       var prazo = PRAZOS.filter(function (p) { return p[0] === v('prazo'); })[0] || [];
@@ -247,25 +265,24 @@
       var value = prazo[3] || 10;
 
       AV.identify({ name: lead.nome, email: lead.email, phone: lead.whatsapp, city: lead.cidade, uf: lead.uf });
-      AV.track('generate_lead', { form: kind, uf: lead.uf, city: lead.cidade, lead_temperature: lead.temperatura, value: value, currency: 'BRL', event_id: eventId });
-      AV.adsConversion(value, eventId);
+      AV.track('generate_lead', { form: kind, section: formSection(kind), uf: lead.uf, city: lead.cidade, lead_temperature: lead.temperatura, value: value, currency: 'BRL', event_id: eventId });
+      AV.adsConversion({ value: value, eventId: eventId });
+      try { sendLead(lead); } catch (err) {}
 
       var msgWpp = 'Olá! Sou ' + lead.nome + ' e tenho interesse em abrir uma franquia Auto Visão em ' + lead.cidade + '/' + lead.uf + '. Prazo: ' + (prazo[1] || '-') + '.' + (lead.mensagem ? ' ' + lead.mensagem : '');
 
-      sendLead(lead).then(function () {
-        form.hidden = true;
-        if (kind === 'download') {
-          try { localStorage.setItem('av_download_ok', '1'); } catch (er) {}
-          $('#downloadLink').href = driveUrl();
-          $('#successWpp').href = wppUrl(msgWpp + ' Acabei de baixar a apresentação.');
-          var ok = $('#downloadSuccess'); ok.hidden = false; ok.focus();
-          AV.track('file_download', { file_name: C.PRESENTATION_NAME, content_name: 'apresentacao_franquia', event_id: eventId });
-          startDownload();
-        } else {
-          $('#contatoWpp').href = wppUrl(msgWpp);
-          var ok2 = $('#contatoSuccess'); ok2.hidden = false; ok2.focus();
-        }
-      });
+      form.hidden = true;
+      if (kind === 'download') {
+        try { localStorage.setItem('av_download_ok', '1'); } catch (er) {}
+        $('#downloadLink').href = driveUrl();
+        $('#successWpp').href = wppUrl(msgWpp + ' Acabei de baixar a apresentação.');
+        var ok = $('#downloadSuccess'); ok.hidden = false; ok.focus();
+        AV.track('file_download', { file_name: C.PRESENTATION_NAME, content_name: 'apresentacao_franquia', section: 'apresentacao', event_id: eventId });
+        startDownload();
+      } else {
+        $('#contatoWpp').href = wppUrl(msgWpp);
+        var ok2 = $('#contatoSuccess'); ok2.hidden = false; ok2.focus();
+      }
     });
   });
 

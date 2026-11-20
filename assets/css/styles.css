@@ -634,3 +634,19 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .areas li { padding: 8px 0; }
 }
 .quote blockquote { padding-right: 36px; }
+
+/* ---------- Política de privacidade e links legais ---------- */
+.page-legal .header { background: rgba(21, 20, 21, .96); box-shadow: 0 1px 0 rgba(255, 255, 255, .08); }
+.page-legal .footer { padding-bottom: 40px; }
+.legal { padding: calc(var(--header-h) + 40px) 0 80px; }
+.legal__wrap { max-width: 760px; }
+.legal h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 8px 0 12px; }
+.legal h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.25; margin: 32px 0 8px; }
+.legal p { color: var(--text-2); margin-bottom: 12px; }
+.legal ul { list-style: disc; padding-left: 1.2rem; display: grid; gap: 6px; margin: 0 0 12px; }
+.legal li { color: var(--text-2); }
+.legal a { color: var(--action); font-weight: 600; }
+.legal .updated { font-size: 13px; }
+.footer__legal { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.footer__legal a { color: inherit; text-decoration: underline; }
+.cookie a, .form-note a { color: var(--action); font-weight: 600; text-decoration: underline; }
