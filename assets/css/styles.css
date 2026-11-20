@@ -650,3 +650,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .footer__legal { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 .footer__legal a { color: inherit; text-decoration: underline; }
 .cookie a, .form-note a { color: var(--action); font-weight: 600; text-decoration: underline; }
+
+/* ---------- Páginas internas (sitelinks) ---------- */
+.page-inner .header { background: rgba(21, 20, 21, .96); box-shadow: 0 1px 0 rgba(255, 255, 255, .08); }
+.page-inner main { padding-top: var(--header-h); }
+.page-hero { background: var(--impact); color: #fff; padding: 48px 0 56px; }
+.page-hero h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 5vw, 52px); line-height: 1.08; letter-spacing: -.02em; max-width: 18ch; margin: 0 0 16px; }
+.page-hero .lead { max-width: 640px; }
+.page-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.page-related { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 8px; }
+.page-related a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.nav a[aria-current="page"] { color: #fff; }
+.nav a[aria-current="page"]::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 2px; height: 2px; background: var(--brand-red); }
+.drawer__nav a[aria-current="page"] { color: #FF8A8E; }
+.faq__a a { color: var(--action); font-weight: 600; }
+.page-related a { padding: 6px 0; }
