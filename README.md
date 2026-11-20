@@ -80,6 +80,14 @@ Também ativos: correspondência avançada do Pixel e conversões otimizadas do 
 - `llms.txt` (índice para IAs) e `llms-full.txt` (todo o conteúdo factual em texto simples, com fontes)
 - Desempenho: hero em WebP (580 KB → 40 KB), fontes com `display=swap`, imagens com dimensões, scripts com `async`/`defer`
 
+## Ícones e prévia de link
+
+- Favicon gerado do **vetor oficial do símbolo** (DS p.31), sem redesenho: `favicon.ico` (16/32/48), `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` (180), `icon-192/512.png` e `icon-maskable-512.png` (Android, versão branca sobre vermelho)
+- Símbolo isolado para outros usos: `assets/img/simbolo-autovisao.svg` e `simbolo-autovisao-branco.svg`
+- Banner de prévia (WhatsApp, LinkedIn, Facebook, X): `assets/img/og-preview.jpg`, 1200×630, 95 KB (o WhatsApp ignora imagens acima de ~300 KB)
+
+**Ao migrar para o domínio final**, troque `https://otaviobmarques.github.io/nova-lp-autovisao-franquias-claude` por `https://sejaumfranqueado.autovisao.com` nas tags `og:url`, `og:image`, `og:image:secure_url` e `twitter:image` do `index.html`. Depois, force a atualização da prévia no [Depurador de Compartilhamento da Meta](https://developers.facebook.com/tools/debug/) e no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/).
+
 Depois de publicar no domínio final: envie o sitemap no Google Search Console e no Bing Webmaster Tools (o Bing alimenta o ChatGPT e o Copilot).
 
 ## Rodar localmente
