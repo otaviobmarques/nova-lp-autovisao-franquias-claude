@@ -20,7 +20,7 @@ window.AV_CONFIG = {
      false: não envia pelo gtag. Use só se o GTM for a única fonte.
      Os eventos av_* continuam no dataLayer nos dois casos. */
   SEND_ADS_CONVERSIONS_VIA_GTAG: true,
-  META_PIXEL_ID: '916911729103377',
+  META_PIXEL_ID: '2296327844222677',
 
   /* --- Captcha (Cloudflare Turnstile, gratuito) --------------------------
      Crie em dash.cloudflare.com > Turnstile e cole a Site Key aqui.
