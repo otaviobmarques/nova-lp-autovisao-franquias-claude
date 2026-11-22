@@ -30,7 +30,7 @@ Tudo fica em **`assets/js/config.js`**:
 | `GOOGLE_ADS_LEAD_LABEL` | `TSX2CPHt3P8ZENGOjqw-` | Conversão de lead (formulário enviado) |
 | `GOOGLE_ADS_WHATSAPP_LABEL` | `nLbrCMG-wd4ZENGOjqw-` | Conversão `[Site] Botão wpp` (todo clique de WhatsApp) |
 | `SEND_ADS_CONVERSIONS_VIA_GTAG` | `true` | `false` desliga o envio dessas conversões pelo gtag e deixa só o GTM |
-| `META_PIXEL_ID` | `916911729103377` | Pixel da Meta |
+| `META_PIXEL_ID` | `2296327844222677` | Pixel da Meta |
 | `TURNSTILE_SITE_KEY` | *(vazio)* | Captcha Cloudflare Turnstile. Vazio = desafio próprio (conta simples) |
 | `LEAD_ENDPOINT` | URL `/exec` publicada | Único lugar do Web App. Ver `DEPLOY-APPS-SCRIPT.md` |
 | `PRESENTATION_FILE_ID` | ID do PDF no Drive | O arquivo precisa estar como "qualquer pessoa com o link" |
